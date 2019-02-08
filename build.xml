@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="clean_build" name="offline-signer">
+	
+	<property name="workspace" value="."/>
+	<property name="source" value="${workspace}/src"/>
+	<property name="dependencies" value="${workspace}/lib"/>
+	<property name="build-dir" value="${workspace}/build"/>
+	<property name="built-sources" value="${build-dir}/main"/>
+	<property name="built-jar" value="${workspace}/dist"/>
+	<property name="jar-name" value="offline-signer"/>
+	
+	<target name="clean_build" depends="clean, build"/>
+	
+	<target name="build">
+		<mkdir dir="${built-sources}"/>
+		<javac debug="true" debuglevel="source,lines,vars" includeantruntime="false" release="10" srcdir="${source}" destdir="${built-sources}" includes="**/*.java,module-info.java">
+			<modulepath>
+				<pathelement location="${dependencies}/ed25519.jar"/>
+				<pathelement location="${dependencies}/modRlp.jar"/>
+			</modulepath>
+		</javac>
+
+		<jar destfile="${built-sources}/${jar-name}.jar" filesetmanifest="mergewithoutmain" basedir="${built-sources}"/>
+				
+		<move includeemptydirs="false" todir="${built-jar}">
+			<file file="${built-sources}/${jar-name}.jar"/>
+		</move>
+	
+		<echo message=" "/>
+		<echo message="Newly built jar can be found at: ${built-jar}/${jar-name}.jar"/>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build-dir}"/>
+		<delete dir="${built-jar}"/>
+	</target>
+	
+</project>
