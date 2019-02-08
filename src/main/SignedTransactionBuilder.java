@@ -204,6 +204,23 @@ public final class SignedTransactionBuilder {
         return RLP.encodeList(encodedNonce, encodedTo, encodedValue, encodedData, encodedTimestamp, encodedEnergy, encodedEnergyPrice, encodedType, signature);
     }
 
+    /**
+     * Resets the builder so that it is in its initial state.
+     *
+     * The state of the builder after a call to this method is the same as the state of a newly
+     * constructed builder.
+     */
+    public void reset() {
+        this.privateKey = null;
+        this.nonce = null;
+        this.energyLimit = -1;
+        this.value = null;
+        this.destination = null;
+        this.data = null;
+        this.energyPrice = -1;
+        this.type = 0x1;
+    }
+
     private static byte[] addSkPrefix(byte[] skString) {
         byte[] skEncoded = hexToBytes("302e020100300506032b657004220420");
         byte[] encoded = Arrays.copyOf(skEncoded, skEncoded.length + skString.length);
