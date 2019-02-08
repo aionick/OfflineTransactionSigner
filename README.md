@@ -21,4 +21,4 @@ byte[] signedTransaction = new SignedTransactionBuilder()
     .buildSignedTransaction();
 ```
 
-These signed bytes can be sent to the blockchain via the RLP sendRawTransaction method.
+These signed bytes can be sent to the blockchain via the RPC sendRawTransaction method.
