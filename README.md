@@ -22,3 +22,7 @@ byte[] signedTransaction = new SignedTransactionBuilder()
 ```
 
 These signed bytes can be sent to the blockchain via the RPC sendRawTransaction method.
+
+## Credit
+
+The majority of this code was taken from another Aion offline signing tool by arajasek, available at [this github repository](https://github.com/arajasek/TxTool). The primary difference between the two tools is that arajasek's tool both creates the signed transaction __and__ sends it to a node, whereas this tool only creates the transaction itself and nothing more.
