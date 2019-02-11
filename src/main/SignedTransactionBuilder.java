@@ -217,7 +217,7 @@ public final class SignedTransactionBuilder {
      * @throws NullPointerException if signedTransaction is null.
      * @throws IllegalStateException if the provided bytes could not be interpreted.
      */
-    public byte[] getTransactionHashOfSignedTransaction(byte[] signedTransaction) {
+    public static byte[] getTransactionHashOfSignedTransaction(byte[] signedTransaction) {
         if (signedTransaction == null) {
             throw new NullPointerException("cannot extract hash from a null transaction.");
         }
