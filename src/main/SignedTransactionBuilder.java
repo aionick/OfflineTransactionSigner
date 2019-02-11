@@ -16,6 +16,7 @@ import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.crypto.eddsa.spec.EdDSAParameterSpec;
 import org.aion.rlp.RLP;
+import org.aion.rlp.RLPList;
 
 /**
  * A convenience class for building an Aion transaction and signing it locally (offline) using a
@@ -202,6 +203,32 @@ public final class SignedTransactionBuilder {
         byte[] signature = RLP.encodeElement(preEncodeSignature);
 
         return RLP.encodeList(encodedNonce, encodedTo, encodedValue, encodedData, encodedTimestamp, encodedEnergy, encodedEnergyPrice, encodedType, signature);
+    }
+
+    /**
+     * Returns the transaction hash of the provided signed transaction, if this is a valid signed
+     * transaction.
+     *
+     * It is assumed that {@code signedTransaction} is the output of the
+     * {@code buildSignedTransaction()} method.
+     *
+     * @param signedTransaction A signed transaction.
+     * @return the transaction hash of the signed transaction.
+     * @throws NullPointerException if signedTransaction is null.
+     * @throws IllegalStateException if the provided bytes could not be interpreted.
+     */
+    public byte[] getTransactionHashOfSignedTransaction(byte[] signedTransaction) {
+        if (signedTransaction == null) {
+            throw new NullPointerException("cannot extract hash from a null transaction.");
+        }
+
+        RLPList decodedTransactionComponents = RLP.decode2(signedTransaction);
+
+        if (decodedTransactionComponents.size() == 0) {
+            throw new IllegalStateException("failed to interpret the provided RLP-encoded transaction.");
+        }
+
+        return blake2b(decodedTransactionComponents.get(0).getRLPData());
     }
 
     /**
