@@ -139,7 +139,7 @@ public final class SignedTransactionBuilder {
      * @return this builder.
      */
     public SignedTransactionBuilder useAvmTransactionType() {
-        this.type = 0xf;
+        this.type = 0x2;
         return this;
     }
 
