@@ -8,8 +8,51 @@
 	<property name="built-sources" value="${build-dir}/main"/>
 	<property name="built-jar" value="${workspace}/dist"/>
 	<property name="jar-name" value="offline-signer"/>
-	
+
+	<property name="test" value="${workspace}/test"/>
+	<property name="test-reports" value="${workspace}/reports"/>
+	<property name="built-tests" value="${build-dir}/test"/>
+
+	<path id="classpath-test">
+		<pathelement location="${dependencies}/aion-types-22a3be9.jar"/>
+		<pathelement location="${dependencies}/util4j-674e4b5.jar"/>
+		<pathelement location="${dependencies}/guava-25.1-jre.jar"/>
+		<pathelement location="${dependencies}/junit-4.12.jar"/>
+		<pathelement location="${dependencies}/hamcrest-all-1.3.jar"/>
+		<pathelement location="${dependencies}/ed25519.jar"/>
+		<pathelement location="${dependencies}/modRlp.jar"/>
+	</path>
+
 	<target name="clean_build" depends="clean, build"/>
+
+	<target name="test_build" depends="clean_build">
+		<mkdir dir="${built-tests}"/>
+
+		<javac debug="true" debuglevel="source,lines,vars" includeantruntime="false" release="10"
+			   srcdir="${test}" destdir="${built-tests}" includes="**/*.java,module-info.java">
+			<classpath>
+				<pathelement location="${built-sources}"/>
+				<path refid="classpath-test"/>
+			</classpath>
+		</javac>
+	</target>
+
+
+	<target name="test" depends="test_build">
+		<mkdir dir="${test-reports}"/>
+		<junit printsummary="on" haltonfailure="true" fork="true" dir="${workspace}">
+			<classpath>
+				<pathelement location="${built-sources}"/>
+				<pathelement location="${built-tests}"/>
+				<path refid="classpath-test"/>
+			</classpath>
+			<formatter type="plain" usefile="false"/>
+			<formatter type="xml"/>
+			<batchtest todir="${test-reports}">
+				<fileset dir="${test}" includes="**/*Test.java"/>
+			</batchtest>
+		</junit>
+	</target>
 	
 	<target name="build">
 		<mkdir dir="${built-sources}"/>
